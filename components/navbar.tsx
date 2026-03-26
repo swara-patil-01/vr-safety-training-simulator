@@ -15,9 +15,9 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-              <span className="text-accent-foreground font-bold text-lg">VR</span>
+              <span className="text-accent-foreground font-bold text-lg">SF</span>
             </div>
-            <span className="font-bold text-lg text-foreground hidden sm:inline">VRTraining</span>
+            <span className="font-bold text-lg text-foreground hidden sm:inline">SafetyFirst</span>
           </Link>
 
           {/* Navigation Links */}
@@ -39,12 +39,20 @@ export function Navbar() {
               Modules
             </Link>
             <Link
+              href="/courses"
+              className={`transition-colors ${
+                isActive('/courses') ? 'text-accent font-semibold' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Learning Paths
+            </Link>
+            <Link
               href="/dashboard"
               className={`transition-colors ${
                 isActive('/dashboard') ? 'text-accent font-semibold' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              Dashboard
+              Profile
             </Link>
             <Link
               href="/leaderboard"
@@ -52,7 +60,7 @@ export function Navbar() {
                 isActive('/leaderboard') ? 'text-accent font-semibold' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              Leaderboard
+              Achievements
             </Link>
           </div>
 

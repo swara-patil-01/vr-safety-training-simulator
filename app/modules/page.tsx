@@ -2,46 +2,29 @@
 
 import { Navbar } from '@/components/navbar'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { getModules } from '@/lib/api'
-import Image from 'next/image'
+import { useState } from 'react'
+import { modules } from '@/lib/mock-data'
+import { Module } from '@/lib/mock-data'
+import { Lock, ClipboardCheck } from 'lucide-react'
 
-interface Module {
-  id: string
-  title: string
-  description: string
-  category: string
-  difficulty: string
-  duration: number
-  image: string
-  participants: number
-}
+const jobRolesAvailable = ['General Worker', 'Equipment Operator', 'Site Supervisor']
 
 export default function ModulesPage() {
-  const [modules, setModules] = useState<Module[]>([])
-  const [loading, setLoading] = useState(true)
-  const [selectedCategory, setSelectedCategory] = useState('All')
+  const [selectedLevel, setSelectedLevel] = useState<'Beginner' | 'Intermediate' | 'Advanced'>('Beginner')
+  const [selectedRole, setSelectedRole] = useState<string>('General Worker')
 
-  useEffect(() => {
-    const loadModules = async () => {
-      const data = await getModules()
-      setModules(data)
-      setLoading(false)
-    }
-    loadModules()
-  }, [])
+  const filteredModules = modules.filter(m => {
+    const levelMatch = m.level === selectedLevel
+    const roleMatch = m.jobRoles.includes(selectedRole)
+    return levelMatch && roleMatch
+  })
 
-  const categories = ['All', 'Safety', 'Medical', 'Industrial', 'Business', 'Technical']
-  const filteredModules = selectedCategory === 'All' 
-    ? modules 
-    : modules.filter(m => m.category === selectedCategory)
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch(difficulty) {
-      case 'Beginner': return 'text-green-400'
-      case 'Intermediate': return 'text-yellow-400'
-      case 'Advanced': return 'text-red-400'
-      default: return 'text-gray-400'
+  const getLevelBadgeColor = (level: string) => {
+    switch(level) {
+      case 'Beginner': return 'bg-green-500/20 text-green-400 border-green-500/30'
+      case 'Intermediate': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+      case 'Advanced': return 'bg-red-500/20 text-red-400 border-red-500/30'
+      default: return 'bg-gray-500/20 text-gray-400'
     }
   }
 
@@ -52,101 +35,138 @@ export default function ModulesPage() {
       {/* Header */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 border-b border-border bg-card">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Training Modules</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2">Safety Training Modules</h1>
           <p className="text-lg text-muted-foreground">
-            Choose from our comprehensive library of VR training experiences
+            Professional construction site safety certification courses
           </p>
         </div>
       </section>
 
       {/* Main Content */}
       <div className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Category Filter */}
-          <div className="mb-12 flex flex-wrap gap-3">
-            {categories.map(category => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-lg border transition-all ${
-                  selectedCategory === category
-                    ? 'border-accent bg-accent/20 text-accent'
-                    : 'border-border bg-card text-muted-foreground hover:border-accent'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-
-          {/* Loading State */}
-          {loading && (
-            <div className="text-center py-12">
-              <div className="inline-flex items-center gap-2">
-                <div className="w-2 h-2 bg-accent rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+        <div className="max-w-7xl mx-auto space-y-8">
+          {/* Filters */}
+          <div className="space-y-6">
+            {/* Level Filter */}
+            <div>
+              <h3 className="text-sm font-semibold text-foreground mb-3">Training Level</h3>
+              <div className="flex flex-wrap gap-3">
+                {(['Beginner', 'Intermediate', 'Advanced'] as const).map(level => (
+                  <button
+                    key={level}
+                    onClick={() => setSelectedLevel(level)}
+                    className={`px-4 py-2 rounded-lg border transition-all ${
+                      selectedLevel === level
+                        ? 'border-accent bg-accent/20 text-accent'
+                        : 'border-border bg-card text-muted-foreground hover:border-accent'
+                    }`}
+                  >
+                    {level}
+                  </button>
+                ))}
               </div>
             </div>
-          )}
+
+            {/* Role Filter */}
+            <div>
+              <h3 className="text-sm font-semibold text-foreground mb-3">Job Role</h3>
+              <div className="flex flex-wrap gap-3">
+                {jobRolesAvailable.map(role => (
+                  <button
+                    key={role}
+                    onClick={() => setSelectedRole(role)}
+                    className={`px-4 py-2 rounded-lg border transition-all ${
+                      selectedRole === role
+                        ? 'border-accent bg-accent/20 text-accent'
+                        : 'border-border bg-card text-muted-foreground hover:border-accent'
+                    }`}
+                  >
+                    {role}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
 
           {/* Modules Grid */}
-          {!loading && (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredModules.map(module => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredModules.map(module => {
+              const hasPrerequisites = module.prerequisites.length > 0;
+              return (
                 <Link href={`/modules/${module.id}`} key={module.id}>
                   <div className="group h-full rounded-xl border border-border bg-card hover:border-accent overflow-hidden transition-all hover:shadow-lg hover:shadow-accent/20 cursor-pointer">
-                    {/* Image */}
-                    <div className="relative h-48 bg-secondary overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent"></div>
-                      <div className="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform">
-                        📚
+                    {/* Header */}
+                    <div className="p-6 border-b border-border bg-secondary/30 space-y-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="text-lg font-semibold text-foreground group-hover:text-accent transition-colors flex-1">
+                          {module.title}
+                        </h3>
+                        <span className={`px-2 py-1 rounded text-xs font-semibold border ${getLevelBadgeColor(module.level)}`}>
+                          {module.level}
+                        </span>
                       </div>
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {module.description}
+                      </p>
                     </div>
 
                     {/* Content */}
                     <div className="p-6 space-y-4">
+                      {/* Safety Topics */}
                       <div>
-                        <h3 className="text-xl font-semibold text-foreground group-hover:text-accent transition-colors">
-                          {module.title}
-                        </h3>
-                        <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
-                          {module.description}
-                        </p>
+                        <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Safety Topics</p>
+                        <div className="flex flex-wrap gap-2">
+                          {module.safetyTopics.map(topic => (
+                            <span key={topic} className="text-xs bg-accent/10 text-accent px-2 py-1 rounded">
+                              {topic}
+                            </span>
+                          ))}
+                        </div>
                       </div>
 
                       {/* Metadata */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className={`font-semibold ${getDifficultyColor(module.difficulty)}`}>
-                            {module.difficulty}
-                          </span>
-                          <span className="text-muted-foreground">{module.duration} min</span>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">Duration</span>
+                          <span className="font-medium text-foreground">{module.duration} min</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-muted-foreground bg-secondary px-3 py-1 rounded-full">
-                            {module.category}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {module.participants.toLocaleString()} participants
-                          </span>
+                          <span className="text-muted-foreground">Passing Score</span>
+                          <span className="font-medium text-foreground">{module.passingScore}%</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">Certification</span>
+                          <span className="font-medium text-accent text-xs">{module.certificationValue}</span>
                         </div>
                       </div>
 
+                      {/* Prerequisites */}
+                      {hasPrerequisites && (
+                        <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded text-sm">
+                          <div className="flex items-center gap-2 text-yellow-400">
+                            <Lock className="w-4 h-4" />
+                            <span>Prerequisites required</span>
+                          </div>
+                        </div>
+                      )}
+
                       {/* CTA */}
-                      <button className="w-full py-2 px-4 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-colors font-medium text-sm mt-4">
-                        Start Training →
+                      <button className="w-full py-2 px-4 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-colors font-medium text-sm">
+                        <div className="flex items-center justify-center gap-2">
+                          <ClipboardCheck className="w-4 h-4" />
+                          Begin Module
+                        </div>
                       </button>
                     </div>
                   </div>
                 </Link>
-              ))}
-            </div>
-          )}
+              );
+            })}
+          </div>
 
-          {!loading && filteredModules.length === 0 && (
+          {filteredModules.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-muted-foreground text-lg">No modules found in this category</p>
+              <p className="text-muted-foreground text-lg">No modules available for this level and role combination</p>
             </div>
           )}
         </div>

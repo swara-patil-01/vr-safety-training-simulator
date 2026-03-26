@@ -1,14 +1,15 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { SafetyChatbot } from '@/components/safety-chatbot'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'VRTraining - Immersive Professional Development',
-  description: 'Master critical skills in virtual reality. Complete immersive training modules, compete on the leaderboard, and advance your career with next-gen VR technology.',
+  title: 'SafetyFirst - Construction Site Safety Training',
+  description: 'Professional construction site safety training with immersive VR scenarios, certification reporting, and AI-powered learning support. Prevent incidents, protect lives.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -38,6 +39,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-sans antialiased">
         {children}
+        <SafetyChatbot />
         <Analytics />
       </body>
     </html>
