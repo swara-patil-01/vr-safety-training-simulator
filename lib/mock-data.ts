@@ -148,7 +148,7 @@ export const modules: Module[] = [
     certificationValue: 'Site Supervisor Certification',
     prerequisites: ['4', '5'],
     passingScore: 80,
-    videoUrl: '/videos/fire-safety.mp4'
+    videoUrl: '/videos/FireHazard.mov'
   },
   {
     id: '9',
