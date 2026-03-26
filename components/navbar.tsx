@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { ThemeToggle } from './theme-toggle'
 
 export function Navbar() {
   const pathname = usePathname()
@@ -64,8 +65,9 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* User Profile Placeholder */}
+          {/* Theme Toggle & User Profile */}
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <button className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-accent-foreground font-semibold">
               U
             </button>
