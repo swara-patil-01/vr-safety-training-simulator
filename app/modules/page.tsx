@@ -13,7 +13,6 @@ export default function ModulesPage() {
 
   // Track which module video is currently active
   const [activeModule, setActiveModule] = useState<Module | null>(null)
-
   const filteredModules = modules.filter(m => {
     const levelMatch = m.level === selectedLevel
     const roleMatch = m.jobRoles.includes(selectedRole)

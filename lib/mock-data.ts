@@ -70,7 +70,7 @@ export const modules: Module[] = [
     certificationValue: 'IOSH WorkSafe Module',
     prerequisites: [],
     passingScore: 70,
-    videoUrl: '/videos/fire-safety.mp4'
+    videoUrl: '/videos/FallingBlock.mov'
   },
   {
     id: '3',
@@ -83,7 +83,7 @@ export const modules: Module[] = [
     certificationValue: 'IOSH WorkSafe Module',
     prerequisites: [],
     passingScore: 70,
-    videoUrl: '/videos/fire-safety.mp4'
+    videoUrl: 'videos/Crane.mp4'
   },
   {
     id: '4',
