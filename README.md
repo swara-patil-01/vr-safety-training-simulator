@@ -1,35 +1,34 @@
-# v0-vr-safety-training-app
+##VR Safety Training Simulator
+A web-based VR training platform for construction site safety. This application provides interactive VR scenarios and safety modules for different job roles to enhance workplace safety awareness and compliance.
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+##Features
+Interactive VR Scenarios: Simulate real-world hazards like fire, falling objects, and equipment accidents.
+Role-Based Training: Modules tailored for General Workers, Equipment Operators, and Site Supervisors.
+Certification Tracking: Tracks duration, passing scores, and completion certificates.
+Prerequisite Management: Certain modules require completion of foundational modules before access.
+Responsive Design: Works across desktop and mobile devices.
+Video & VR Integration: Combines instructional videos with VR scenarios for immersive learning.
 
-## Built with v0
+##Installation
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+Clone the repository
+git clone https://github.com/your-username/vr-safety-training-simulator.git
+cd vr-safety-training-simulator
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_vT5TrCgBiWp6UsChPc2PDeHy7qWQ)
+Install dependencies
+npm install
 
-## Getting Started
-
-First, run the development server:
-
-```bash
+Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open your browser at http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+##Usage
+Navigate to the Modules Page to select a training level and job role. Click 'Begin Module' to start a VR simulation or watch a training video. Complete prerequisites to unlock advanced modules. Track completion and certification for each module.
 
-## Learn More
-
-To learn more, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
-
-<a href="https://v0.app/chat/api/kiro/clone/swara-patil-01/v0-vr-safety-training-app" alt="Open in Kiro"><img src="https://pdgvvgmkdvyeydso.public.blob.vercel-storage.com/open%20in%20kiro.svg?sanitize=true" /></a>
+##Technologies
+Next.js 13 – React framework for server-side rendering and routing
+React – Component-based UI
+Tailwind CSS – Utility-first CSS for styling
+Lucide Icons – UI icons for interactive components
+WebXR / Three.js (optional) – VR and immersive 3D environment integration
