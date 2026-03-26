@@ -1,10 +1,8 @@
 'use client'
 
 import { Navbar } from '@/components/navbar'
-import Link from 'next/link'
 import { useState } from 'react'
-import { modules } from '@/lib/mock-data'
-import { Module } from '@/lib/mock-data'
+import { modules, Module } from '@/lib/mock-data'
 import { Lock, ClipboardCheck } from 'lucide-react'
 
 const jobRolesAvailable = ['General Worker', 'Equipment Operator', 'Site Supervisor']
@@ -13,6 +11,9 @@ export default function ModulesPage() {
   const [selectedLevel, setSelectedLevel] = useState<'Beginner' | 'Intermediate' | 'Advanced'>('Beginner')
   const [selectedRole, setSelectedRole] = useState<string>('General Worker')
 
+  // Track which module video is currently active
+  const [activeModule, setActiveModule] = useState<Module | null>(null)
+
   const filteredModules = modules.filter(m => {
     const levelMatch = m.level === selectedLevel
     const roleMatch = m.jobRoles.includes(selectedRole)
@@ -20,11 +21,15 @@ export default function ModulesPage() {
   })
 
   const getLevelBadgeColor = (level: string) => {
-    switch(level) {
-      case 'Beginner': return 'bg-green-500/20 text-green-400 border-green-500/30'
-      case 'Intermediate': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
-      case 'Advanced': return 'bg-red-500/20 text-red-400 border-red-500/30'
-      default: return 'bg-gray-500/20 text-gray-400'
+    switch (level) {
+      case 'Beginner':
+        return 'bg-green-500/20 text-green-400 border-green-500/30'
+      case 'Intermediate':
+        return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+      case 'Advanced':
+        return 'bg-red-500/20 text-red-400 border-red-500/30'
+      default:
+        return 'bg-gray-500/20 text-gray-400'
     }
   }
 
@@ -41,10 +46,10 @@ export default function ModulesPage() {
           </p>
         </div>
       </section>
-
-      {/* Main Content */}
+      
       <div className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto space-y-8">
+
           {/* Filters */}
           <div className="space-y-6">
             {/* Level Filter */}
@@ -88,13 +93,34 @@ export default function ModulesPage() {
             </div>
           </div>
 
-          {/* Modules Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredModules.map(module => {
-              const hasPrerequisites = module.prerequisites.length > 0;
-              return (
-                <Link href={`/modules/${module.id}`} key={module.id}>
-                  <div className="group h-full rounded-xl border border-border bg-card hover:border-accent overflow-hidden transition-all hover:shadow-lg hover:shadow-accent/20 cursor-pointer">
+          {/* Modules Grid or Video Player */}
+          {activeModule ? (
+            <div className="space-y-4">
+              <button
+                onClick={() => setActiveModule(null)}
+                className="px-4 py-2 rounded-lg bg-secondary text-foreground hover:bg-secondary/80"
+              >
+                ← Back to Modules
+              </button>
+
+              <div className="w-full aspect-video rounded-lg overflow-hidden border border-border">
+                <video
+                  src={activeModule.videoUrl}
+                  controls
+                  autoPlay
+                  className="w-full h-full"
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredModules.map(module => {
+                const hasPrerequisites = module.prerequisites.length > 0
+                return (
+                  <div
+                    key={module.id}
+                    className="group h-full rounded-xl border border-border bg-card hover:border-accent overflow-hidden transition-all hover:shadow-lg hover:shadow-accent/20 cursor-pointer"
+                  >
                     {/* Header */}
                     <div className="p-6 border-b border-border bg-secondary/30 space-y-3">
                       <div className="flex items-start justify-between gap-3">
@@ -105,9 +131,7 @@ export default function ModulesPage() {
                           {module.level}
                         </span>
                       </div>
-                      <p className="text-sm text-muted-foreground line-clamp-2">
-                        {module.description}
-                      </p>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{module.description}</p>
                     </div>
 
                     {/* Content */}
@@ -117,9 +141,7 @@ export default function ModulesPage() {
                         <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Safety Topics</p>
                         <div className="flex flex-wrap gap-2">
                           {module.safetyTopics.map(topic => (
-                            <span key={topic} className="text-xs bg-accent/10 text-accent px-2 py-1 rounded">
-                              {topic}
-                            </span>
+                            <span key={topic} className="text-xs bg-accent/10 text-accent px-2 py-1 rounded">{topic}</span>
                           ))}
                         </div>
                       </div>
@@ -150,27 +172,31 @@ export default function ModulesPage() {
                         </div>
                       )}
 
-                      {/* CTA */}
-                      <button className="w-full py-2 px-4 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-colors font-medium text-sm">
+                      {/* Begin Module Button */}
+                      <button
+                        onClick={() => setActiveModule(module)}
+                        className="w-full py-2 px-4 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-colors font-medium text-sm"
+                      >
                         <div className="flex items-center justify-center gap-2">
                           <ClipboardCheck className="w-4 h-4" />
-                          Begin Module
+                          <span>Begin Module</span>
                         </div>
                       </button>
                     </div>
                   </div>
-                </Link>
-              );
-            })}
-          </div>
+                )
+              })}
+            </div>
+          )}
 
           {filteredModules.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-muted-foreground text-lg">No modules available for this level and role combination</p>
+              <p className="text-muted-foreground text-lg">
+                No modules available for this level and role combination
+              </p>
             </div>
           )}
         </div>
       </div>
     </div>
-  )
-}
+  )}

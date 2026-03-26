@@ -9,6 +9,7 @@ export interface Module {
   certificationValue: string;
   prerequisites: string[];
   passingScore: number;
+  videoUrl: string;
 }
 
 export interface Certification {
@@ -56,6 +57,7 @@ export const modules: Module[] = [
     certificationValue: 'IOSH WorkSafe Module',
     prerequisites: [],
     passingScore: 70,
+    videoUrl: '/videos/fire-safety.mp4'
   },
   {
     id: '2',
@@ -68,6 +70,7 @@ export const modules: Module[] = [
     certificationValue: 'IOSH WorkSafe Module',
     prerequisites: [],
     passingScore: 70,
+    videoUrl: '/videos/fire-safety.mp4'
   },
   {
     id: '3',
@@ -80,6 +83,7 @@ export const modules: Module[] = [
     certificationValue: 'IOSH WorkSafe Module',
     prerequisites: [],
     passingScore: 70,
+    videoUrl: '/videos/fire-safety.mp4'
   },
   {
     id: '4',
@@ -92,6 +96,7 @@ export const modules: Module[] = [
     certificationValue: 'IOSH WorkSafe + Specialized Certification',
     prerequisites: ['3'],
     passingScore: 75,
+    videoUrl: '/videos/fire-safety.mp4'
   },
   {
     id: '5',
@@ -104,6 +109,7 @@ export const modules: Module[] = [
     certificationValue: 'IOSH WorkSafe + Specialized Certification',
     prerequisites: ['2'],
     passingScore: 75,
+    videoUrl: '/videos/fire-safety.mp4'
   },
   {
     id: '6',
@@ -116,6 +122,7 @@ export const modules: Module[] = [
     certificationValue: 'IOSH WorkSafe + Crane Certification',
     prerequisites: ['1'],
     passingScore: 75,
+    videoUrl: 'videos/FallingBlock.mov'
   },
   {
     id: '7',
@@ -128,6 +135,7 @@ export const modules: Module[] = [
     certificationValue: 'Equipment Operator Certification',
     prerequisites: ['4', '6'],
     passingScore: 80,
+    videoUrl: '/videos/fire-safety.mp4'
   },
   {
     id: '8',
@@ -140,6 +148,7 @@ export const modules: Module[] = [
     certificationValue: 'Site Supervisor Certification',
     prerequisites: ['4', '5'],
     passingScore: 80,
+    videoUrl: '/videos/fire-safety.mp4'
   },
   {
     id: '9',
@@ -152,6 +161,7 @@ export const modules: Module[] = [
     certificationValue: 'Emergency Response Certification',
     prerequisites: ['2', '8'],
     passingScore: 80,
+    videoUrl: '/videos/fire-safety.mp4'
   },
 ];
 
